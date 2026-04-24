@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Penilaian Takbiran{% endblock %}
+{% block extra_style %}
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.stat-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+}
+.stat-card.hijau::before { background: var(--hijau); }
+.stat-card.emas::before { background: var(--emas); }
+.stat-card.biru::before { background: #2471a3; }
+.stat-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.stat-number { font-size: 2.5rem; font-weight: 700; color: var(--hijau); font-family: 'Amiri', serif; }
+.stat-label { font-size: 0.85rem; color: var(--teks-abu); margin-top: 0.25rem; }
+.welcome-card {
+    background: linear-gradient(135deg, var(--hijau) 0%, var(--hijau-muda) 100%);
+    border-radius: 12px;
+    padding: 2rem;
+    color: white;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+.welcome-card::after {
+    content: '☪';
+    position: absolute; right: 2rem; top: 50%; transform: translateY(-50%);
+    font-size: 6rem; opacity: 0.1;
+}
+.welcome-card h2 { font-family: 'Amiri', serif; font-size: 1.5rem; color: var(--emas-muda); }
+.welcome-card p { opacity: 0.85; margin-top: 0.5rem; font-size: 0.9rem; }
+.welcome-card .role-badge {
+    display: inline-block;
+    background: var(--emas);
+    color: var(--hijau);
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-top: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.quick-links { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.quick-link {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-decoration: none;
+    color: var(--teks);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+.quick-link:hover { border-color: var(--hijau); background: #f0f7f3; }
+.quick-link-icon { font-size: 1.5rem; }
+.quick-link span { font-size: 0.8rem; color: var(--teks-abu); display: block; font-weight: 400; }
+{% endblock %}
+{% block content %}
+<div class="welcome-card">
+    <h2>Selamat Datang, {{ session.nama }}!</h2>
+    <p>Sistem Penilaian Lomba Takbir — silakan gunakan menu di atas untuk navigasi.</p>
+    <div class="role-badge">{{ session.role }}{% if session.role == 'juri' %} — {{ session.aspek }}{% endif %}</div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card hijau">
+        <div class="stat-icon">🕌</div>
+        <div class="stat-number">{{ total_peserta }}</div>
+        <div class="stat-label">Total Peserta</div>
+    </div>
+    <div class="stat-card emas">
+        <div class="stat-icon">📝</div>
+        <div class="stat-number">{{ total_nilai }}</div>
+        <div class="stat-label">Total Penilaian</div>
+    </div>
+    <div class="stat-card biru">
+        <div class="stat-icon">📍</div>
+        <div class="stat-number">{{ total_titik }}</div>
+        <div class="stat-label">Titik Lokasi</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">Menu Cepat</div>
+    <div class="quick-links">
+        {% if session.role == 'admin' %}
+        <a href="{{ url_for('peserta') }}" class="quick-link">
+            <span class="quick-link-icon">🕌</span>
+            <div>Kelola Peserta <span>Tambah, edit, hapus data peserta</span></div>
+        </a>
+        <a href="{{ url_for('titik') }}" class="quick-link">
+            <span class="quick-link-icon">📍</span>
+            <div>Titik Lokasi <span>Atur titik penilaian</span></div>
+        </a>
+        <a href="{{ url_for('kelola_juri') }}" class="quick-link">
+            <span class="quick-link-icon">👥</span>
+            <div>Kelola Juri <span>Tambah dan atur akun juri</span></div>
+        </a>
+        {% else %}
+        <a href="{{ url_for('input_nilai') }}" class="quick-link">
+            <span class="quick-link-icon">✏️</span>
+            <div>Input Nilai <span>Masukkan penilaian peserta</span></div>
+        </a>
+        {% endif %}
+        <a href="{{ url_for('rekap') }}" class="quick-link">
+            <span class="quick-link-icon">🏆</span>
+            <div>Rekap & Ranking <span>Lihat hasil penilaian</span></div>
+        </a>
+    </div>
+</div>
+{% endblock %}
