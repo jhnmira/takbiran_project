@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Data Peserta - Penilaian Takbiran{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Data Peserta</h1>
+    <p>Kelola daftar peserta lomba takbiran</p>
+</div>
+<div class="card">
+    <div class="card-header">
+        Daftar Peserta
+        <a href="{{ url_for('tambah_peserta') }}" class="btn btn-hijau btn-sm">+ Tambah Peserta</a>
+    </div>
+    {% if data %}
+    <table>
+        <thead>
+            <tr>
+                <th>No. Urut</th>
+                <th>Nama Grup</th>
+                <th>Asal Masjid/Mushola</th>
+                <th>Jenis Kelamin</th>
+                <th>Jumlah Anggota</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in data %}
+            <tr>
+                <td><strong>{{ p.nomor_urut }}</strong></td>
+                <td>{{ p.nama_grup }}</td>
+                <td>{{ p.asal }}</td>
+                <td>
+                    {% if p.jenis_kelamin == 'Laki-laki' %}
+                    <span class="badge badge-biru">{{ p.jenis_kelamin }}</span>
+                    {% elif p.jenis_kelamin == 'Perempuan' %}
+                    <span class="badge badge-merah">{{ p.jenis_kelamin }}</span>
+                    {% else %}
+                    <span class="badge badge-emas">{{ p.jenis_kelamin }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ p.jumlah_anggota }} orang</td>
+                <td>
+                    <a href="{{ url_for('edit_peserta', id=p.id) }}" class="btn btn-outline btn-sm">Edit</a>
+                    <a href="{{ url_for('hapus_peserta', id=p.id) }}" class="btn btn-merah btn-sm" onclick="return confirm('Yakin hapus peserta ini?')">Hapus</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align:center; color:#888; padding:2rem;">Belum ada peserta. <a href="{{ url_for('tambah_peserta') }}">Tambah sekarang</a></p>
+    {% endif %}
+</div>
+{% endblock %}
