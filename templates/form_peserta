@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{% if data %}Edit{% else %}Tambah{% endif %} Peserta - Penilaian Takbiran{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>{% if data %}Edit{% else %}Tambah{% endif %} Peserta</h1>
+    <p>{% if data %}Ubah data peserta{% else %}Tambah peserta baru{% endif %}</p>
+</div>
+<div class="card" style="max-width:600px;">
+    <div class="card-header">Form Peserta</div>
+    <form method="POST">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Nomor Urut</label>
+                <input type="number" name="nomor_urut" value="{{ data.nomor_urut if data else '' }}" required min="1">
+            </div>
+            <div class="form-group">
+                <label>Jenis Kelamin</label>
+                <select name="jenis_kelamin" required>
+                    <option value="">-- Pilih --</option>
+                    <option value="Laki-laki" {% if data and data.jenis_kelamin == 'Laki-laki' %}selected{% endif %}>Laki-laki</option>
+                    <option value="Perempuan" {% if data and data.jenis_kelamin == 'Perempuan' %}selected{% endif %}>Perempuan</option>
+                    <option value="Campuran" {% if data and data.jenis_kelamin == 'Campuran' %}selected{% endif %}>Campuran</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Nama Grup / Tim</label>
+            <input type="text" name="nama_grup" value="{{ data.nama_grup if data else '' }}" placeholder="Contoh: Tim Takbir Al-Ikhlas" required>
+        </div>
+        <div class="form-group">
+            <label>Asal Masjid / Mushola</label>
+            <input type="text" name="asal" value="{{ data.asal if data else '' }}" placeholder="Contoh: Masjid Al-Ikhlas RT 05" required>
+        </div>
+        <div class="form-group">
+            <label>Jumlah Anggota</label>
+            <input type="number" name="jumlah" value="{{ data.jumlah_anggota if data else '' }}" placeholder="Jumlah anggota tim" required min="1">
+        </div>
+        <div style="display:flex; gap:1rem; margin-top:0.5rem;">
+            <button type="submit" class="btn btn-hijau">💾 Simpan</button>
+            <a href="{{ url_for('peserta') }}" class="btn btn-outline">Batal</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
