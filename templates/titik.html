@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Titik Lokasi - Penilaian Takbiran{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Titik Lokasi</h1>
+    <p>Kelola titik-titik penilaian di sepanjang rute takbiran</p>
+</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; align-items:start;">
+    <div class="card">
+        <div class="card-header">Tambah Titik Lokasi</div>
+        <form method="POST" action="{{ url_for('tambah_titik') }}">
+            <div class="form-group">
+                <label>Nama Titik Lokasi</label>
+                <input type="text" name="nama_titik" placeholder="Contoh: Titik A - Depan Balai Desa" required>
+            </div>
+            <button type="submit" class="btn btn-hijau">+ Tambah</button>
+        </form>
+    </div>
+    <div class="card">
+        <div class="card-header">Daftar Titik Lokasi</div>
+        {% if data %}
+        <table>
+            <thead><tr><th>Nama Titik</th><th>Aksi</th></tr></thead>
+            <tbody>
+                {% for t in data %}
+                <tr>
+                    <td>📍 {{ t.nama_titik }}</td>
+                    <td><a href="{{ url_for('hapus_titik', id=t.id) }}" class="btn btn-merah btn-sm" onclick="return confirm('Yakin hapus titik ini?')">Hapus</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="color:#888; text-align:center; padding:1rem;">Belum ada titik lokasi.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
