@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Penilaian Takbiran{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+    --hijau: #1a5c38;
+    --hijau-muda: #2d8653;
+    --hijau-terang: #4aad6f;
+    --emas: #c9a84c;
+    --emas-muda: #e8c97a;
+    --bg: #f5f0e8;
+    --bg-card: #fffef9;
+    --teks: #1a1a1a;
+    --teks-abu: #666;
+    --border: #e0d8c8;
+    --merah: #c0392b;
+    --biru: #2471a3;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg);
+    color: var(--teks);
+    min-height: 100vh;
+}
+.navbar {
+    background: var(--hijau);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    border-bottom: 3px solid var(--emas);
+}
+.navbar-brand {
+    font-family: 'Amiri', serif;
+    color: var(--emas-muda);
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+}
+.navbar-brand span { color: white; font-size: 0.85rem; display: block; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 400; }
+.nav-links { display: flex; align-items: center; gap: 0.5rem; }
+.nav-links a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+.nav-links a:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-links a.active { background: var(--emas); color: var(--hijau); font-weight: 600; }
+.nav-user {
+    color: rgba(255,255,255,0.7);
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.nav-user strong { color: var(--emas-muda); }
+.nav-user a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.2); padding: 0.3rem 0.8rem; border-radius: 20px; transition: all 0.2s; }
+.nav-user a:hover { background: rgba(255,255,255,0.1); color: white; }
+.container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+.page-header { margin-bottom: 2rem; }
+.page-header h1 { font-family: 'Amiri', serif; font-size: 1.8rem; color: var(--hijau); }
+.page-header p { color: var(--teks-abu); margin-top: 0.25rem; font-size: 0.9rem; }
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.card-header {
+    font-weight: 600;
+    color: var(--hijau);
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--emas);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+th { background: var(--hijau); color: white; padding: 0.75rem 1rem; text-align: left; font-weight: 500; }
+th:first-child { border-radius: 8px 0 0 0; }
+th:last-child { border-radius: 0 8px 0 0; }
+td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
+tr:hover td { background: #f5f5f0; }
+tr:last-child td { border-bottom: none; }
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.btn-hijau { background: var(--hijau); color: white; }
+.btn-hijau:hover { background: var(--hijau-muda); }
+.btn-emas { background: var(--emas); color: var(--hijau); }
+.btn-emas:hover { background: var(--emas-muda); }
+.btn-merah { background: var(--merah); color: white; }
+.btn-merah:hover { background: #a93226; }
+.btn-outline { background: transparent; color: var(--hijau); border: 1.5px solid var(--hijau); }
+.btn-outline:hover { background: var(--hijau); color: white; }
+.btn-sm { padding: 0.3rem 0.8rem; font-size: 0.8rem; }
+.form-group { margin-bottom: 1.25rem; }
+.form-group label { display: block; font-weight: 600; font-size: 0.875rem; color: var(--hijau); margin-bottom: 0.5rem; }
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: white;
+    color: var(--teks);
+    transition: border-color 0.2s;
+    outline: none;
+}
+.form-group input:focus, .form-group select:focus { border-color: var(--hijau-terang); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.badge {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.badge-hijau { background: #d4edda; color: var(--hijau); }
+.badge-emas { background: #fef3cd; color: #856404; }
+.badge-merah { background: #f8d7da; color: #721c24; }
+.badge-biru { background: #d1ecf1; color: #0c5460; }
+.alert {
+    padding: 0.875rem 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+.alert-success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+.alert-error { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+.ornament {
+    text-align: center;
+    color: var(--emas);
+    font-size: 1.2rem;
+    letter-spacing: 0.5rem;
+    margin: 0.5rem 0;
+}
+</style>
+{% block extra_style %}{% endblock %}
+</head>
+<body>
+{% if session.user_id %}
+<nav class="navbar">
+    <a href="{{ url_for('dashboard') }}" class="navbar-brand">
+        ☪ Penilaian Takbiran
+        <span>Sistem Penilaian Lomba Takbir</span>
+    </a>
+    <div class="nav-links">
+        <a href="{{ url_for('dashboard') }}" {% if request.endpoint == 'dashboard' %}class="active"{% endif %}>Dashboard</a>
+        {% if session.role == 'admin' %}
+        <a href="{{ url_for('peserta') }}" {% if request.endpoint in ['peserta','tambah_peserta','edit_peserta'] %}class="active"{% endif %}>Peserta</a>
+        <a href="{{ url_for('titik') }}" {% if request.endpoint == 'titik' %}class="active"{% endif %}>Titik Lokasi</a>
+        <a href="{{ url_for('kelola_juri') }}" {% if request.endpoint == 'kelola_juri' %}class="active"{% endif %}>Kelola Juri</a>
+        {% endif %}
+        {% if session.role == 'juri' %}
+        <a href="{{ url_for('input_nilai') }}" {% if request.endpoint == 'input_nilai' %}class="active"{% endif %}>Input Nilai</a>
+        {% endif %}
+        <a href="{{ url_for('rekap') }}" {% if request.endpoint == 'rekap' %}class="active"{% endif %}>Rekap Nilai</a>
+    </div>
+    <div class="nav-user">
+        <span>Halo, <strong>{{ session.nama }}</strong> ({{ session.role }})</span>
+        <a href="{{ url_for('logout') }}">Keluar</a>
+    </div>
+</nav>
+{% endif %}
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>
