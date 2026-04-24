@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Kelola Juri - Penilaian Takbiran{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Kelola Juri</h1>
+    <p>Tambah dan atur akun juri beserta titik dan aspek penilaian</p>
+</div>
+<div style="display:grid; grid-template-columns:1fr 1.5fr; gap:1.5rem; align-items:start;">
+    <div class="card">
+        <div class="card-header">Tambah Akun Juri</div>
+        <form method="POST" action="{{ url_for('tambah_juri') }}">
+            <div class="form-group">
+                <label>Nama Juri</label>
+                <input type="text" name="nama" placeholder="Nama lengkap juri" required>
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Username untuk login" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="form-group">
+                <label>Titik Lokasi</label>
+                <select name="titik_id" required>
+                    <option value="">-- Pilih Titik --</option>
+                    {% for t in titik_list %}
+                    <option value="{{ t.id }}">{{ t.nama_titik }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Aspek Penilaian</label>
+                <select name="aspek" required>
+                    <option value="">-- Pilih Aspek --</option>
+                    <option value="kerapian">Kerapian</option>
+                    <option value="kekompakan">Kekompakan</option>
+                    <option value="keutuhan">Keutuhan</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-hijau">+ Tambah Juri</button>
+        </form>
+    </div>
+    <div class="card">
+        <div class="card-header">Daftar Juri</div>
+        {% if data %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Username</th>
+                    <th>Titik</th>
+                    <th>Aspek</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for j in data %}
+                <tr>
+                    <td>{{ j.nama }}</td>
+                    <td><code>{{ j.username }}</code></td>
+                    <td>{{ j.nama_titik or '-' }}</td>
+                    <td>
+                        {% if j.aspek == 'kerapian' %}<span class="badge badge-hijau">Kerapian</span>
+                        {% elif j.aspek == 'kekompakan' %}<span class="badge badge-emas">Kekompakan</span>
+                        {% elif j.aspek == 'keutuhan' %}<span class="badge badge-biru">Keutuhan</span>
+                        {% endif %}
+                    </td>
+                    <td><a href="{{ url_for('hapus_juri', id=j.id) }}" class="btn btn-merah btn-sm" onclick="return confirm('Yakin hapus juri ini?')">Hapus</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="color:#888; text-align:center; padding:1rem;">Belum ada juri.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
