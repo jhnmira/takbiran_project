@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Input Nilai - Penilaian Takbiran{% endblock %}
+{% block extra_style %}
+.aspek-badge {
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.aspek-kerapian { background: #d4edda; color: var(--hijau); }
+.aspek-kekompakan { background: #fef3cd; color: #856404; }
+.aspek-keutuhan { background: #d1ecf1; color: #0c5460; }
+.nilai-select {
+    padding: 0.4rem 0.6rem;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: white;
+    color: var(--hijau);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.nilai-select:focus { border-color: var(--hijau); }
+.nilai-select.filled { background: #f0f7f3; border-color: var(--hijau-terang); }
+.info-bar {
+    background: linear-gradient(135deg, var(--hijau) 0%, var(--hijau-muda) 100%);
+    color: white;
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+.info-bar .label { font-size: 0.8rem; opacity: 0.8; }
+.info-bar .value { font-weight: 700; font-size: 1rem; color: var(--emas-muda); }
+{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Input Nilai</h1>
+    <p>Masukkan nilai untuk setiap peserta yang lewat</p>
+</div>
+
+{% if session.role == 'juri' %}
+<div class="info-bar">
+    <div>
+        <div class="label">Titik Lokasi</div>
+        <div class="value">📍 {{ session.get('titik_nama', 'Titik ' ~ titik_id) }}</div>
+    </div>
+    <div>
+        <div class="label">Aspek Penilaian</div>
+        <div class="value">
+            <span class="aspek-badge aspek-{{ aspek }}">{{ aspek }}</span>
+        </div>
+    </div>
+    <div>
+        <div class="label">Juri</div>
+        <div class="value">{{ session.nama }}</div>
+    </div>
+</div>
+{% endif %}
+
+<form method="POST" action="{{ url_for('simpan_nilai') }}">
+<div class="card">
+    <div class="card-header">
+        Daftar Peserta
+        <button type="submit" class="btn btn-emas btn-sm">💾 Simpan Semua Nilai</button>
+    </div>
+    {% if peserta_list %}
+    <table>
+        <thead>
+            <tr>
+                <th>No. Urut</th>
+                <th>Nama Grup</th>
+                <th>Asal Masjid/Mushola</th>
+                <th>JK</th>
+                <th>Nilai (70-100)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in peserta_list %}
+            {% set key = (p.id, titik_id, aspek) %}
+            {% set existing = nilai_existing.get(key) %}
+            <tr>
+                <td><strong>{{ p.nomor_urut }}</strong></td>
+                <td>{{ p.nama_grup }}</td>
+                <td>{{ p.asal }}</td>
+                <td>
+                    {% if p.jenis_kelamin == 'Laki-laki' %}<span class="badge badge-biru">L</span>
+                    {% elif p.jenis_kelamin == 'Perempuan' %}<span class="badge badge-merah">P</span>
+                    {% else %}<span class="badge badge-emas">C</span>{% endif %}
+                </td>
+                <td>
+                    <select name="nilai_{{ p.id }}" class="nilai-select {% if existing %}filled{% endif %}" required>
+                        <option value="">-- Nilai --</option>
+                        {% for n in [70, 75, 80, 85, 90, 95, 100] %}
+                        <option value="{{ n }}" {% if existing == n %}selected{% endif %}>{{ n }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div style="padding:1rem; text-align:right;">
+        <button type="submit" class="btn btn-hijau">💾 Simpan Semua Nilai</button>
+    </div>
+    {% else %}
+    <p style="text-align:center; color:#888; padding:2rem;">Belum ada peserta. Hubungi admin untuk menambah peserta.</p>
+    {% endif %}
+</div>
+</form>
+{% endblock %}
